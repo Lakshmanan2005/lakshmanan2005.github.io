@@ -1,142 +1,653 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Lakshmanan Portfolio</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lakshmanan C — Data Scientist & ML Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
 <style>
-body {
-    font-family: Arial;
-    margin: 0;
-    background-color: #f4f4f4;
-}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #050a0e;
+    --bg2: #0b1219;
+    --surface: #101c27;
+    --border: #1e3348;
+    --accent: #00d4ff;
+    --accent2: #7b61ff;
+    --accent3: #00ffaa;
+    --text: #e8f4fd;
+    --muted: #5a7a96;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; cursor: none; }
 
-header {
-    background: #333;
-    color: white;
-    padding: 20px;
-    text-align: center;
-}
+  .cursor { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; mix-blend-mode: screen; }
+  .cursor-ring { width: 36px; height: 36px; border: 1px solid var(--accent); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; opacity: 0.5; }
 
-section {
-    padding: 20px;
-}
+  body::before { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); pointer-events: none; z-index: 1; opacity: 0.6; }
+  body::after { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px); background-size: 60px 60px; pointer-events: none; z-index: 0; }
 
-.project {
-    background: white;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 5px;
-}
+  nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 60px; background: rgba(5,10,14,0.88); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+  .nav-logo { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; text-decoration: none; }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a { font-family: var(--mono); font-size: 0.75rem; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
 
-footer {
-    background: #333;
-    color: white;
-    text-align: center;
-    padding: 10px;
-}
+  .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 120px 60px 80px; position: relative; z-index: 2; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(90px); pointer-events: none; animation: pulse 6s ease-in-out infinite; }
+  .orb1 { width: 500px; height: 500px; background: rgba(0,212,255,0.07); right: -100px; top: 10%; }
+  .orb2 { width: 350px; height: 350px; background: rgba(123,97,255,0.09); right: 200px; bottom: 10%; animation-delay: 2s; }
+  .orb3 { width: 250px; height: 250px; background: rgba(0,255,170,0.06); left: 5%; bottom: 20%; animation-delay: 4s; }
+  @keyframes pulse { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.1);opacity:1} }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(24px)} to{opacity:1;transform:translateY(0)} }
+
+  .hero-eyebrow { font-family: var(--mono); font-size: 0.78rem; color: var(--accent); letter-spacing: 0.25em; text-transform: uppercase; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+  .hero-name { font-size: clamp(3.5rem, 8vw, 8rem); font-weight: 800; line-height: 0.9; letter-spacing: -0.03em; background: linear-gradient(135deg, #e8f4fd 0%, var(--accent) 50%, var(--accent2) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; opacity: 0; animation: fadeUp 0.7s ease 0.4s forwards; }
+  .hero-role { margin-top: 28px; font-family: var(--mono); font-size: 1.05rem; color: var(--muted); opacity: 0; animation: fadeUp 0.7s ease 0.6s forwards; }
+  .hero-role span { color: var(--accent3); }
+  .hero-summary { margin-top: 32px; max-width: 580px; font-size: 1.05rem; color: #8ab4cc; line-height: 1.75; opacity: 0; animation: fadeUp 0.7s ease 0.8s forwards; }
+  .hero-cta { margin-top: 52px; display: flex; gap: 16px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.7s ease 1s forwards; }
+
+  .btn { padding: 14px 32px; font-family: var(--mono); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border-radius: 3px; transition: all 0.25s ease; cursor: none; }
+  .btn-primary { background: var(--accent); color: var(--bg); font-weight: 700; border: none; }
+  .btn-primary:hover { background: #00b8d9; transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,212,255,0.3); }
+  .btn-secondary { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+  .btn-secondary:hover { background: rgba(0,212,255,0.08); transform: translateY(-2px); }
+
+  .stats-bar { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 0 60px; background: var(--surface); position: relative; z-index: 2; }
+  .stat { flex: 1; padding: 30px 24px; text-align: center; border-right: 1px solid var(--border); }
+  .stat:last-child { border-right: none; }
+  .stat-num { font-family: var(--mono); font-size: 2.2rem; font-weight: 700; color: var(--accent); display: block; }
+  .stat-label { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin-top: 6px; }
+
+  section { position: relative; z-index: 2; padding: 100px 60px; }
+  .section-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+  .section-title { font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 60px; }
+
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
+  .about-left p { font-size: 1.05rem; color: #8ab4cc; line-height: 1.8; margin-bottom: 20px; }
+  .about-right { display: flex; flex-direction: column; gap: 14px; }
+  .about-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 20px 22px; display: flex; gap: 14px; align-items: flex-start; }
+  .about-card-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .about-card-label { font-family: var(--mono); font-size: 0.64rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 4px; }
+  .about-card-val { font-size: 0.95rem; color: var(--text); font-weight: 600; }
+  .about-card-sub { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .skill-card { background: var(--bg2); padding: 36px 32px; transition: background 0.2s; }
+  .skill-card:hover { background: var(--surface); }
+  .skill-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+  .skill-category { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+  .skill-name { font-size: 1.15rem; font-weight: 700; color: var(--text); margin-bottom: 14px; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { font-family: var(--mono); font-size: 0.68rem; padding: 5px 10px; border-radius: 3px; background: rgba(0,212,255,0.07); color: var(--muted); border: 1px solid var(--border); }
+  .tag.accent { background: rgba(0,212,255,0.14); color: var(--accent); border-color: rgba(0,212,255,0.3); }
+  .tag.purple { background: rgba(123,97,255,0.12); color: #a590ff; border-color: rgba(123,97,255,0.25); }
+  .tag.green { background: rgba(0,255,170,0.09); color: var(--accent3); border-color: rgba(0,255,170,0.2); }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 24px; }
+  .project-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s; position: relative; display: flex; flex-direction: column; }
+  .project-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); opacity: 0; transition: opacity 0.3s; }
+  .project-card:hover { border-color: rgba(0,212,255,0.4); transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+  .project-card:hover::before { opacity: 1; }
+  .project-card.featured { grid-column: span 2; }
+  .project-card.featured .project-body { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+  .project-card.featured .project-links { grid-column: span 2; }
+  .project-header { padding: 28px 32px 0; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+  .project-num { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); }
+  .project-badge { font-family: var(--mono); font-size: 0.64rem; padding: 4px 10px; border-radius: 2px; background: rgba(0,255,170,0.1); color: var(--accent3); border: 1px solid rgba(0,255,170,0.2); letter-spacing: 0.08em; text-transform: uppercase; white-space: nowrap; }
+  .project-body { padding: 18px 32px 32px; flex: 1; }
+  .project-title { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 10px; line-height: 1.25; }
+  .project-desc { font-size: 0.9rem; color: #6a8fa8; line-height: 1.7; margin-bottom: 16px; }
+  .project-highlight { font-family: var(--mono); font-size: 0.76rem; color: var(--accent); background: rgba(0,212,255,0.07); border-left: 2px solid var(--accent); padding: 10px 14px; border-radius: 0 4px 4px 0; margin-bottom: 20px; }
+  .project-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 22px; }
+  .project-links { display: flex; gap: 12px; flex-wrap: wrap; }
+  .project-link { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); text-decoration: none; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 18px; border: 1px solid var(--border); border-radius: 3px; transition: all 0.2s; cursor: none; }
+  .project-link:hover { color: var(--accent); border-color: var(--accent); background: rgba(0,212,255,0.05); }
+  .project-link.primary { color: var(--accent); border-color: rgba(0,212,255,0.35); }
+
+  .github-strip { position: relative; z-index: 2; margin: 0 60px; background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 40px 48px; display: flex; align-items: center; justify-content: space-between; gap: 32px; }
+  .github-strip h3 { font-size: 1.5rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+  .github-strip p { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+  .github-strip p span { color: var(--accent); }
+
+  .experience-list { display: flex; flex-direction: column; gap: 16px; }
+  .exp-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+  .exp-header { display: flex; align-items: center; justify-content: space-between; padding: 28px 36px; }
+  .exp-meta { display: flex; flex-direction: column; gap: 6px; }
+  .exp-company { font-family: var(--mono); font-size: 0.7rem; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; }
+  .exp-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+  .exp-date { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); padding: 5px 12px; border: 1px solid var(--border); border-radius: 3px; white-space: nowrap; }
+  .exp-body { padding: 0 36px 28px; display: flex; flex-direction: column; gap: 10px; }
+  .exp-point { display: flex; gap: 14px; font-size: 0.9rem; color: #6a8fa8; line-height: 1.65; }
+  .exp-point::before { content: '→'; color: var(--accent); font-family: var(--mono); flex-shrink: 0; }
+
+  .cert-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .cert-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 28px 26px; position: relative; overflow: hidden; transition: border-color 0.25s, transform 0.25s; }
+  .cert-card:hover { border-color: rgba(123,97,255,0.4); transform: translateY(-3px); }
+  .cert-card::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--accent2), var(--accent)); opacity: 0; transition: opacity 0.3s; }
+  .cert-card:hover::after { opacity: 1; }
+  .cert-issuer { font-family: var(--mono); font-size: 0.65rem; color: var(--accent2); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 10px; }
+  .cert-name { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.35; margin-bottom: 8px; }
+  .cert-desc { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); line-height: 1.5; }
+
+  .contact-section { background: var(--bg2); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .contact-text h2 { font-size: clamp(2.2rem,4vw,3.5rem); font-weight: 800; letter-spacing: -0.02em; color: var(--text); line-height: 1.05; margin-bottom: 20px; }
+  .contact-text p { font-size: 1rem; color: #6a8fa8; line-height: 1.7; margin-bottom: 36px; }
+  .contact-links { display: flex; flex-direction: column; gap: 12px; }
+  .contact-link { display: flex; align-items: center; gap: 16px; font-family: var(--mono); font-size: 0.82rem; color: var(--muted); text-decoration: none; padding: 16px 20px; border: 1px solid var(--border); border-radius: 6px; transition: all 0.2s; cursor: none; }
+  .contact-link:hover { color: var(--accent); border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.04); }
+  .contact-link-icon { font-size: 1.1rem; }
+  .contact-link-text { flex: 1; }
+  .contact-link-label { font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); display: block; margin-bottom: 2px; }
+  .contact-link-value { color: var(--text); font-size: 0.85rem; }
+  .contact-aside { display: flex; flex-direction: column; gap: 14px; }
+  .info-box { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 22px 24px; }
+  .info-box-label { font-family: var(--mono); font-size: 0.68rem; color: var(--accent); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 8px; }
+  .info-box-value { font-size: 1rem; color: var(--text); font-weight: 600; }
+  .info-box-sub { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); margin-top: 3px; }
+
+  footer { padding: 28px 60px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); position: relative; z-index: 2; }
+  .footer-copy { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+  .footer-copy span { color: var(--accent); }
+  .footer-right { display: flex; gap: 24px; }
+  .footer-link { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); text-decoration: none; transition: color 0.2s; cursor: none; }
+  .footer-link:hover { color: var(--accent); }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media(max-width:900px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    section, footer { padding: 70px 24px; }
+    .hero { padding: 110px 24px 60px; }
+    .stats-bar { margin: 0 24px; flex-wrap: wrap; }
+    .stat { min-width: 50%; }
+    .project-card.featured { grid-column: span 1; }
+    .project-card.featured .project-body { grid-template-columns: 1fr; }
+    .project-card.featured .project-links { grid-column: span 1; }
+    .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .github-strip { margin: 0 24px; flex-direction: column; text-align: center; }
+  }
 </style>
 </head>
-
 <body>
 
-<header>
-<h1>Lakshmanan Chandran</h1>
-<p>Aspiring Data Analyst | Machine Learning Engineer</p>
-</header>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
 
-<section>
-<h2>👨‍💻 About Me</h2>
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">LC // Portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#certifications">Certs</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
 
-<p>
-I am a passionate data enthusiast skilled in Python, Machine Learning,
-and Deep Learning. I enjoy solving real-world problems using data
-analysis and intelligent systems.
-</p>
-
+<!-- HERO -->
+<section class="hero">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+  <p class="hero-eyebrow">▸ Available for opportunities &nbsp;·&nbsp; Coimbatore, Tamil Nadu</p>
+  <h1 class="hero-name">Lakshmanan<br/>C.</h1>
+  <p class="hero-role"><span>Data Scientist</span> &amp; ML Engineer — building intelligent systems from raw data</p>
+  <p class="hero-summary">End-to-end ML pipeline architect with IBM certifications in Data Science &amp; Analysis. 94%+ CNN accuracy in production. Skilled across Python, SQL, Tableau &amp; Power BI — turning data into decisions.</p>
+  <div class="hero-cta">
+    <a href="#projects" class="btn btn-primary">View Projects</a>
+    <a href="https://github.com/Lakshmanan2005" target="_blank" class="btn btn-secondary">⌨ GitHub ↗</a>
+    <a href="#contact" class="btn btn-secondary">Get in Touch</a>
+  </div>
 </section>
 
-<section>
-
-<h2>🛠 Skills</h2>
-
-<ul>
-<li>Python</li>
-<li>SQL</li>
-<li>Pandas</li>
-<li>NumPy</li>
-<li>Machine Learning</li>
-<li>Deep Learning</li>
-<li>OpenCV</li>
-<li>Power BI</li>
-</ul>
-
-</section>
-
-<section>
-
-<h2>📂 Projects</h2>
-
-<div class="project">
-<h3>😴 Driver Drowsiness Detection</h3>
-
-<p>
-Real-time drowsiness detection using computer vision and CNN model.
-</p>
-
-<a href="https://github.com/Lakshmanan2005/drowsiness-detection">View Project</a>
-
+<!-- STATS -->
+<div class="stats-bar reveal">
+  <div class="stat"><span class="stat-num">94%+</span><span class="stat-label">CNN Accuracy</span></div>
+  <div class="stat"><span class="stat-num">50K+</span><span class="stat-label">Records Analyzed</span></div>
+  <div class="stat"><span class="stat-num">3×</span><span class="stat-label">IBM Certifications</span></div>
+  <div class="stat"><span class="stat-num">8.5</span><span class="stat-label">CGPA / 10</span></div>
+  <div class="stat"><span class="stat-num">8</span><span class="stat-label">GitHub Repos</span></div>
 </div>
 
-<div class="project">
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label reveal">// 01 — Who I Am</div>
+  <h2 class="section-title reveal">About Me</h2>
+  <div class="about-grid">
+    <div class="about-left reveal">
+      <p>I'm an aspiring Data Scientist and ML Engineer with a strong foundation in Python, supervised &amp; unsupervised machine learning, deep learning (CNN), and NLP. I love building end-to-end systems — from raw data all the way to deployed AI applications.</p>
+      <p>I completed industry simulations with <strong style="color:var(--accent)">Deloitte Australia</strong> and <strong style="color:var(--accent)">Tata Group</strong>, and hold three IBM certifications in Data Science, Data Analysis, and Data Visualization.</p>
+      <p>My flagship project — a real-time Driver Drowsiness Detection system — achieved <strong style="color:var(--accent3)">94%+ accuracy</strong> using CNN and is fully deployed via Streamlit, from training straight to production.</p>
+    </div>
+    <div class="about-right reveal">
+      <div class="about-card">
+        <div class="about-card-icon">🎓</div>
+        <div>
+          <div class="about-card-label">Education</div>
+          <div class="about-card-val">B.Sc. Computer Science</div>
+          <div class="about-card-sub">Bharathiar University · 2022–2025 · CGPA 8.5/10</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">📍</div>
+        <div>
+          <div class="about-card-label">Location</div>
+          <div class="about-card-val">Coimbatore, Tamil Nadu</div>
+          <div class="about-card-sub">Open to remote &amp; hybrid roles pan-India</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">🌐</div>
+        <div>
+          <div class="about-card-label">Languages</div>
+          <div class="about-card-val">Tamil · English</div>
+          <div class="about-card-sub">Native · Professional Proficiency</div>
+        </div>
+      </div>
+      <div class="about-card">
+        <div class="about-card-icon">⚡</div>
+        <div>
+          <div class="about-card-label">Status</div>
+          <div class="about-card-val" style="color:var(--accent3)">● Actively Seeking Roles</div>
+          <div class="about-card-sub">Data Scientist · ML Engineer · Data Analyst · BA</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
-<h3>🏦 Bank Loan Risk Prediction</h3>
+<!-- SKILLS -->
+<section id="skills" style="padding-top:20px;">
+  <div class="section-label reveal">// 02 — Technical Arsenal</div>
+  <h2 class="section-title reveal">Skills &amp; Expertise</h2>
+  <div class="skills-grid reveal">
+    <div class="skill-card">
+      <span class="skill-icon">🧠</span>
+      <div class="skill-category">Core Discipline</div>
+      <div class="skill-name">Machine Learning</div>
+      <div class="skill-tags">
+        <span class="tag accent">Supervised</span><span class="tag accent">Unsupervised</span>
+        <span class="tag">Regression</span><span class="tag">KNN</span><span class="tag">SVM</span>
+        <span class="tag">Random Forest</span><span class="tag">K-Means</span><span class="tag">Feature Engineering</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🔬</span>
+      <div class="skill-category">Advanced AI</div>
+      <div class="skill-name">Deep Learning &amp; NLP</div>
+      <div class="skill-tags">
+        <span class="tag purple">CNN</span><span class="tag purple">Image Classification</span>
+        <span class="tag purple">Real-Time Inference</span><span class="tag purple">TF-IDF</span>
+        <span class="tag purple">Sentiment Analysis</span><span class="tag">OpenCV</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🐍</span>
+      <div class="skill-category">Languages &amp; Libraries</div>
+      <div class="skill-name">Python Ecosystem</div>
+      <div class="skill-tags">
+        <span class="tag accent">Pandas</span><span class="tag accent">NumPy</span>
+        <span class="tag accent">Scikit-learn</span><span class="tag">Matplotlib</span>
+        <span class="tag">Seaborn</span><span class="tag">Streamlit</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">📊</span>
+      <div class="skill-category">Visualization &amp; BI</div>
+      <div class="skill-name">Data Storytelling</div>
+      <div class="skill-tags">
+        <span class="tag green">Tableau</span><span class="tag green">Power BI</span>
+        <span class="tag green">DAX</span><span class="tag green">KPI Dashboards</span>
+        <span class="tag">Excel</span><span class="tag">Pivot Tables</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">🗄️</span>
+      <div class="skill-category">Data Engineering</div>
+      <div class="skill-name">SQL &amp; Databases</div>
+      <div class="skill-tags">
+        <span class="tag">MySQL</span><span class="tag">JOINs</span>
+        <span class="tag">Window Functions</span><span class="tag">ETL</span>
+        <span class="tag">Subqueries</span><span class="tag">GROUP BY</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <span class="skill-icon">⚙️</span>
+      <div class="skill-category">Tools &amp; Platforms</div>
+      <div class="skill-name">Dev Environment</div>
+      <div class="skill-tags">
+        <span class="tag">Git</span><span class="tag">Jupyter</span>
+        <span class="tag">VS Code</span><span class="tag">Google Colab</span>
+        <span class="tag">AWS Free Tier</span><span class="tag">Notion</span><span class="tag">JIRA</span>
+      </div>
+    </div>
+  </div>
+</section>
 
-<p>
-Machine learning model to predict loan default risk.
-</p>
+<!-- PROJECTS -->
+<section id="projects" style="padding-top:20px;">
+  <div class="section-label reveal">// 03 — Featured Work</div>
+  <h2 class="section-title reveal">Projects</h2>
+  <div class="projects-grid">
 
-<a href="https://github.com/Lakshmanan2005/BANK-LOAN-RISK-ANALYSIS">View Project</a>
+    <div class="project-card featured reveal">
+      <div class="project-header">
+        <span class="project-num">01 — FLAGSHIP PROJECT</span>
+        <span class="project-badge">⚡ 94%+ Accuracy</span>
+      </div>
+      <div class="project-body">
+        <div>
+          <h3 class="project-title">Driver Drowsiness Detection System</h3>
+          <p class="project-desc">Real-time safety AI that monitors driver alertness via webcam. Custom CNN pipeline trained to classify eye state from live video frames, with Pygame audio alert system — fully production-deployed on Streamlit.</p>
+          <div class="project-highlight">▸ Alert triggers on 2+ consecutive seconds of drowsiness · Haar Cascade + CNN ensemble pipeline</div>
+        </div>
+        <div>
+          <div class="project-stack">
+            <span class="tag accent">Python</span><span class="tag purple">CNN</span>
+            <span class="tag purple">Deep Learning</span><span class="tag">OpenCV</span>
+            <span class="tag">Streamlit</span><span class="tag">Haar Cascade</span><span class="tag">Pygame</span>
+          </div>
+          <div class="project-links">
+            <a href="https://github.com/Lakshmanan2005/drowsiness-detection" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-num">02</span>
+        <span class="project-badge">Unsupervised ML</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Customer Segmentation — K-Means</h3>
+        <p class="project-desc">Identified 5 distinct consumer segments from behavioral data using K-Means clustering, with Elbow Method and Silhouette scoring for optimal cluster selection.</p>
+        <div class="project-highlight">▸ 5 consumer segments · Elbow + Silhouette optimization</div>
+        <div class="project-stack">
+          <span class="tag accent">Python</span><span class="tag">Scikit-learn</span>
+          <span class="tag">K-Means</span><span class="tag">EDA</span><span class="tag">Matplotlib</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Lakshmanan2005/customer-segmentation" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-num">03</span>
+        <span class="project-badge">BI Dashboard</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Retail Sales Analysis &amp; BI Dashboard</h3>
+        <p class="project-desc">Deep-dive EDA on 50,000+ transaction records. Built multi-layered KPI dashboards in Tableau and Power BI tracking revenue, demand, and performance metrics.</p>
+        <div class="project-highlight">▸ 50,000+ records · Dual BI dashboards · Inventory optimization</div>
+        <div class="project-stack">
+          <span class="tag accent">Python</span><span class="tag green">Tableau</span>
+          <span class="tag green">Power BI</span><span class="tag">SQL</span><span class="tag">Excel</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Lakshmanan2005/Retail-Sales-Analysis-and-Business-Insights-Dashboard" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-num">04</span>
+        <span class="project-badge">Risk Analysis</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Bank Loan Risk Analysis</h3>
+        <p class="project-desc">Queried 10,000+ loan records using advanced SQL to identify approval bottlenecks and default risk segments. Delivered structured risk report with 10+ visual summaries.</p>
+        <div class="project-highlight">▸ 10,000+ records · SQL Window Functions · Credit &amp; income segmentation</div>
+        <div class="project-stack">
+          <span class="tag accent">Python</span><span class="tag">SQL</span>
+          <span class="tag">Pandas</span><span class="tag">ETL Pipeline</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Lakshmanan2005/BANK-LOAN-RISK-ANALYSIS" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-num">05</span>
+        <span class="project-badge">Healthcare</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Healthcare Operations Analysis</h3>
+        <p class="project-desc">End-to-end EDA on healthcare dataset — handled missing values, outliers, and feature inconsistencies. Delivered a 10+ chart stakeholder insight report with clinical recommendations.</p>
+        <div class="project-highlight">▸ 10+ chart report · Actionable clinical insights · Process mapping</div>
+        <div class="project-stack">
+          <span class="tag accent">Python</span><span class="tag">Pandas</span>
+          <span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Lakshmanan2005/HEALTHCARE_ANALYSIS" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-header">
+        <span class="project-num">06</span>
+        <span class="project-badge">Data Analysis</span>
+      </div>
+      <div class="project-body">
+        <h3 class="project-title">Agriculture Data Analysis</h3>
+        <p class="project-desc">Comprehensive analysis of agricultural datasets to uncover yield patterns, seasonal trends, and crop performance insights using Python and data visualization tools.</p>
+        <div class="project-highlight">▸ Yield pattern analysis · Seasonal trend detection · Visual reporting</div>
+        <div class="project-stack">
+          <span class="tag accent">Python</span><span class="tag">Pandas</span>
+          <span class="tag">Jupyter Notebook</span><span class="tag">EDA</span>
+        </div>
+        <div class="project-links">
+          <a href="https://github.com/Lakshmanan2005/Agriculture-data-analysis" target="_blank" class="project-link primary">⌨ GitHub ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- GITHUB STRIP -->
+<div class="github-strip reveal">
+  <div>
+    <h3>All Projects on GitHub</h3>
+    <p>Explore all <span>8 repositories</span> — source code, Jupyter notebooks, dashboards &amp; more</p>
+  </div>
+  <a href="https://github.com/Lakshmanan2005" target="_blank" class="btn btn-primary">⌨ Visit GitHub Profile ↗</a>
 </div>
 
-<div class="project">
-
-<h3>📊 Retail Sales Dashboard</h3>
-
-<p>
-Business insights dashboard created using retail sales data.
-</p>
-
-<a href="https://github.com/Lakshmanan2005/Retail-Sales-Analysis-and-Business-Insights-Dashboard">View Project</a>
-
-</div>
-
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label reveal">// 04 — Industry Simulations</div>
+  <h2 class="section-title reveal">Experience</h2>
+  <div class="experience-list">
+    <div class="exp-item reveal">
+      <div class="exp-header">
+        <div class="exp-meta">
+          <span class="exp-company">Deloitte Australia — Forage</span>
+          <span class="exp-title">Data Analytics Job Simulation</span>
+        </div>
+        <span class="exp-date">April 2026</span>
+      </div>
+      <div class="exp-body">
+        <div class="exp-point">Built Tableau KPI dashboard tracking enterprise business health metrics; documented structured business recommendations for stakeholder review.</div>
+        <div class="exp-point">Performed ETL operations, data classification, and gap analysis using Excel; delivered findings with process improvement recommendations.</div>
+      </div>
+    </div>
+    <div class="exp-item reveal">
+      <div class="exp-header">
+        <div class="exp-meta">
+          <span class="exp-company">Tata Group — Forage</span>
+          <span class="exp-title">GenAI-Powered Data Analytics Simulation</span>
+        </div>
+        <span class="exp-date">April 2026</span>
+      </div>
+      <div class="exp-body">
+        <div class="exp-point">Conducted EDA using GenAI tools to surface customer behavioral trends and identify high-risk delinquency patterns.</div>
+        <div class="exp-point">Designed end-to-end predictive model pipeline covering feature engineering, model selection, feasibility analysis, and rationale documentation.</div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<section>
-
-<h2>📄 Resume</h2>
-
-<p>
-<a href="https://github.com/Lakshmanan2005/Resumes/blob/main/Data%20Science.pdf">Download Resume</a>
-</p>
-
+<!-- CERTIFICATIONS -->
+<section id="certifications" style="padding-top:20px;">
+  <div class="section-label reveal">// 05 — Credentials</div>
+  <h2 class="section-title reveal">Certifications</h2>
+  <div class="cert-grid">
+    <div class="cert-card reveal">
+      <div class="cert-issuer">IBM · Coursera</div>
+      <div class="cert-name">Data Science Methodology</div>
+      <div class="cert-desc">Data science lifecycle · Problem framing · Solution design</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-issuer">IBM · Coursera</div>
+      <div class="cert-name">Data Analysis with Python</div>
+      <div class="cert-desc">EDA · Data Cleaning · Feature Engineering</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-issuer">IBM · Coursera</div>
+      <div class="cert-name">Data Visualization with R</div>
+      <div class="cert-desc">Statistical charts · ggplot2 · Reporting</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-issuer">Deloitte Australia — Forage</div>
+      <div class="cert-name">Data Analytics Job Simulation</div>
+      <div class="cert-desc">Enterprise KPI dashboards · Stakeholder reporting · ETL</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-issuer">Tata Group — Forage</div>
+      <div class="cert-name">GenAI-Powered Analytics Simulation</div>
+      <div class="cert-desc">Predictive modeling · GenAI-assisted EDA · Risk analysis</div>
+    </div>
+    <div class="cert-card reveal">
+      <div class="cert-issuer">Bharathiar University</div>
+      <div class="cert-name">B.Sc. Computer Science</div>
+      <div class="cert-desc">CGPA 8.5/10 · Statistics · Algorithms · DBMS · Python</div>
+    </div>
+  </div>
 </section>
 
-<section>
-
-<h2>📫 Contact</h2>
-
-<p><a href="lakshmananchandran6@gmail.com">Email</a></p>
-
-<p><a href="www.linkedin.com/in/lakshmanan-c-22342b292">Linkedin</a></p>
-
+<!-- CONTACT -->
+<section id="contact" class="contact-section">
+  <div class="contact-grid">
+    <div class="contact-text reveal">
+      <div class="section-label">// 06 — Let's Connect</div>
+      <h2>Open to<br/>Opportunities</h2>
+      <p>Actively looking for Data Scientist, ML Engineer, Business Analyst, and Data Analyst roles. Let's talk about how I can bring value to your team.</p>
+      <div class="contact-links">
+        <a href="mailto:lakshmananchandran6@gmail.com" class="contact-link">
+          <span class="contact-link-icon">✉</span>
+          <div class="contact-link-text">
+            <span class="contact-link-label">Email</span>
+            <span class="contact-link-value">lakshmananchandran6@gmail.com</span>
+          </div><span>↗</span>
+        </a>
+        <a href="tel:+919597006146" class="contact-link">
+          <span class="contact-link-icon">📱</span>
+          <div class="contact-link-text">
+            <span class="contact-link-label">Phone</span>
+            <span class="contact-link-value">+91 9597006146</span>
+          </div><span>↗</span>
+        </a>
+        <a href="https://github.com/Lakshmanan2005" target="_blank" class="contact-link">
+          <span class="contact-link-icon">⌨</span>
+          <div class="contact-link-text">
+            <span class="contact-link-label">GitHub</span>
+            <span class="contact-link-value">github.com/Lakshmanan2005</span>
+          </div><span>↗</span>
+        </a>
+        <a href="https://linkedin.com/in/lakshmananc" target="_blank" class="contact-link">
+          <span class="contact-link-icon">💼</span>
+          <div class="contact-link-text">
+            <span class="contact-link-label">LinkedIn — Update with your real URL</span>
+            <span class="contact-link-value">linkedin.com/in/lakshmananc</span>
+          </div><span>↗</span>
+        </a>
+      </div>
+    </div>
+    <div class="contact-aside reveal">
+      <div class="info-box">
+        <div class="info-box-label">📍 Location</div>
+        <div class="info-box-value">Coimbatore, Tamil Nadu</div>
+        <div class="info-box-sub">Open to remote &amp; hybrid roles across India</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-label">🎓 Education</div>
+        <div class="info-box-value">B.Sc. Computer Science</div>
+        <div class="info-box-sub">Bharathiar University · 2022–2025 · CGPA 8.5/10</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-label">⚡ Availability</div>
+        <div class="info-box-value" style="color:var(--accent3)">● Available Now</div>
+        <div class="info-box-sub">Full-time · Immediate joining</div>
+      </div>
+      <div class="info-box">
+        <div class="info-box-label">🎯 Target Roles</div>
+        <div class="info-box-value">DS · ML Engineer · DA · BA</div>
+        <div class="info-box-sub">Open to entry-level &amp; junior positions</div>
+      </div>
+    </div>
+  </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-
-<p>© 2026 Lakshmanan</p>
-
+  <p class="footer-copy">© 2025 <span>Lakshmanan C</span> — Built with precision</p>
+  <div class="footer-right">
+    <a href="https://github.com/Lakshmanan2005" target="_blank" class="footer-link">GitHub ↗</a>
+    <a href="#" class="footer-link">↑ Top</a>
+  </div>
 </footer>
 
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.transform = `translate(${mx - 5}px, ${my - 5}px)`;
+  });
+  (function loop() {
+    rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+    ring.style.transform = `translate(${rx - 18}px, ${ry - 18}px)`;
+    requestAnimationFrame(loop);
+  })();
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+</script>
 </body>
 </html>
